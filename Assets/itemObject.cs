@@ -33,6 +33,6 @@ public class itemObject : MonoBehaviour
         inSlot = false;
         rb.useGravity = true;
         col.enabled = true;
-        rb.AddForce(transform.forward * 3, ForceMode.Impulse);
+        //rb.AddForce(transform.forward * 3, ForceMode.Impulse);
     }
 }

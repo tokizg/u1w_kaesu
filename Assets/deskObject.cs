@@ -2,42 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class deskObject : MonoBehaviour
+public abstract class deskObject : MonoBehaviour
 {
     [SerializeField]
-    inventorySlot inventory = new inventorySlot();
+    protected inventorySlot inventory = new inventorySlot();
 
-    public void interact(playerCharactger character)
-    {
-        if (inventory.isEmpty())
-        {
-            //do nothing
-        }
-        else
-        {
-            var item = release();
-            character.grabItem(item);
-        }
-    }
+    void Update() { }
 
-    public void interact(playerCharactger character, itemObject item)
-    {
-        if (inventory.isEmpty())
-        {
-            grab(item);
-        }
-        else
-        {
-            //do nothing
-        }
-    }
+    public abstract void interact(playerCharactger character);
 
-    public void grab(itemObject target)
+    public abstract void interact(playerCharactger character, itemObject item);
+
+    protected void grab(itemObject target)
     {
         inventory.setItem(target);
+        inventory.Item.transform.position = transform.position + transform.up;
     }
 
-    public itemObject release()
+    protected itemObject release()
     {
         return inventory.releaseItem();
     }
