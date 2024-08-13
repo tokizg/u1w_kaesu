@@ -13,7 +13,13 @@ public class stage : deskObject
         else
         {
             var item = release();
-            character.grabItem(item);
+            if (item.IsProcessed)
+                character.grabItem(item);
+            else
+            {
+                item.process();
+                grab(item);
+            }
         }
     }
 

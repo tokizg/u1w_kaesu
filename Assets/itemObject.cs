@@ -2,10 +2,10 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public class itemObject : MonoBehaviour
+public abstract class itemObject : MonoBehaviour
 {
     [SerializeField]
-    bool inSlot = false;
+    Material processedMaterial;
 
     [SerializeField]
     Rigidbody rb;
@@ -13,15 +13,36 @@ public class itemObject : MonoBehaviour
     [SerializeField]
     Collider col;
 
+    [SerializeField]
+    Color pipelineColor;
+
+    public Color PipelineColor
+    {
+        get => pipelineColor;
+    }
+
+    public void initialize(Color color)
+    {
+        pipelineColor = color;
+    }
+
+    public abstract bool IsProcessed { get; }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
     }
 
+    public abstract void process();
+
+    protected void changeMaterial()
+    {
+        GetComponent<Renderer>().material = processedMaterial;
+    }
+
     public bool intoSlot()
     {
-        inSlot = true;
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
         col.enabled = false;
@@ -30,7 +51,6 @@ public class itemObject : MonoBehaviour
 
     public void release()
     {
-        inSlot = false;
         rb.useGravity = true;
         col.enabled = true;
         //rb.AddForce(transform.forward * 3, ForceMode.Impulse);
