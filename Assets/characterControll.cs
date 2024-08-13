@@ -31,9 +31,11 @@ public class characterControll : MonoBehaviour
 
             Vector3 moveDir =
                 Quaternion.Euler(0f, targetAngle, 0f)
-                * Vector3.forward
-                * direction.magnitude
-                * characterSpeed;
+                    * Vector3.forward
+                    * direction.magnitude
+                    * characterSpeed
+                    * Time.deltaTime
+                + Physics.gravity;
 
             c_cCon.Move(moveDir);
         }
