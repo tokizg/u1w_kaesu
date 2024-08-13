@@ -11,10 +11,26 @@ public class Emitter : MonoBehaviour
     float interval = 3f;
 
     [SerializeField]
+    float maxInterval = 12f;
+
+    [SerializeField]
+    float minInterval = 5f;
+
+    void setIntervalRondomly()
+    {
+        interval = Random.Range(minInterval, maxInterval);
+    }
+
+    [SerializeField]
     float lastGeneratedTime = 0f;
 
     [SerializeField]
-    GameObject item;
+    GameObject[] items;
+
+    GameObject randomItem
+    {
+        get { return items[Random.Range(0, items.Length)]; }
+    }
 
     [SerializeField]
     Transform generatePointObject;
@@ -32,12 +48,13 @@ public class Emitter : MonoBehaviour
         {
             lastGeneratedTime = Time.time;
             generate();
+            setIntervalRondomly();
         }
     }
 
     void generate()
     {
-        GameObject generatance = Instantiate(item, transform.position, Quaternion.identity);
+        GameObject generatance = Instantiate(randomItem, transform.position, Quaternion.identity);
         generatance.transform.position = generatePointObject.position;
         generatance.transform.rotation = generatePointObject.rotation;
         generatance.GetComponent<itemObject>().initialize(pipelineColor);

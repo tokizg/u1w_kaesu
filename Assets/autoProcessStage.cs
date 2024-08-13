@@ -16,9 +16,7 @@ public class autoProcessStage : deskObject
             if (item.IsProcessed)
                 character.grabItem(item);
             else
-            {
                 grab(item);
-            }
         }
     }
 
