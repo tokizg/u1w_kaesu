@@ -3,7 +3,7 @@ using UnityEngine;
 public class playerCharactger : MonoBehaviour
 {
     [SerializeField]
-    grabableObject grabingObject;
+    inventorySlot inventory = new inventorySlot();
 
     [SerializeField]
     GameObject colliderTarget;
@@ -15,52 +15,65 @@ public class playerCharactger : MonoBehaviour
             interact();
         }
 
-        if (grabingObject != null)
+        if (!inventory.isEmpty())
         {
-            grabingObject.transform.position = transform.position + transform.up;
-            grabingObject.transform.rotation = transform.rotation;
+            inventory.Item.transform.position = transform.position + transform.up;
+            inventory.Item.transform.forward = transform.forward;
         }
     }
 
     void interact()
     {
-        if (grabingObject != null && colliderTarget == null)
+        var item = colliderTarget != null ? colliderTarget.GetComponent<itemObject>() : null;
+        var desk = colliderTarget != null ? colliderTarget.GetComponent<deskObject>() : null;
+
+        bool isItem = item != null;
+        bool isDesk = desk != null;
+        bool HasItem = !inventory.isEmpty();
+
+        if (isItem && isDesk && HasItem)
         {
-            grabingObject.SendMessage(
-                "KAESU_INTERACT",
-                this,
-                SendMessageOptions.DontRequireReceiver
-            );
+            // impossible pattern
         }
-        else if (grabingObject == null && colliderTarget != null)
+        else if (isItem && isDesk && !HasItem)
         {
-            colliderTarget.SendMessage(
-                "KAESU_INTERACT",
-                this,
-                SendMessageOptions.DontRequireReceiver
-            );
+            // impossible pattern
         }
-        else if (grabingObject != null && colliderTarget != null)
+        else if (isItem && !isDesk && HasItem)
         {
-            colliderTarget.SendMessage(
-                "KAESU_INTERACT",
-                grabingObject,
-                SendMessageOptions.DontRequireReceiver
-            );
+            // do nothing
+        }
+        else if (isItem && !isDesk && !HasItem)
+        {
+            grabItem(item);
+            colliderTarget = null;
+        }
+        else if (!isItem && isDesk && HasItem)
+        {
+            desk.interact(this, releaseItem());
+        }
+        else if (!isItem && isDesk && !HasItem)
+        {
+            desk.interact(this);
+        }
+        else if (!isItem && !isDesk && HasItem)
+        {
+            releaseItem();
+        }
+        else if (!isItem && !isDesk && !HasItem)
+        {
+            // do nothing
         }
     }
 
-    public void grab(grabableObject target)
+    public void grabItem(itemObject target)
     {
-        grabingObject = target;
+        inventory.setItem(target);
     }
 
-    public void release()
+    public itemObject releaseItem()
     {
-        if (grabingObject != null)
-        {
-            grabingObject = null;
-        }
+        return inventory.releaseItem();
     }
 
     void OnTriggerEnter(Collider other)
@@ -68,7 +81,7 @@ public class playerCharactger : MonoBehaviour
         colliderTarget = other.gameObject;
     }
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerExit()
     {
         colliderTarget = null;
     }
