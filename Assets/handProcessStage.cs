@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class stage : deskObject
+public class handProcessStage : deskObject
 {
     public override void interact(playerCharactger character)
     {
@@ -25,7 +25,7 @@ public class stage : deskObject
 
     public override void interact(playerCharactger character, itemObject item)
     {
-        if (inventory.isEmpty())
+        if (inventory.isEmpty() && item as countObject)
         {
             grab(item);
         }
