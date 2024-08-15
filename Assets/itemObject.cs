@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -16,6 +17,9 @@ public abstract class itemObject : MonoBehaviour
     [SerializeField]
     Color pipelineColor;
 
+    [SerializeField]
+    Transform canvas;
+
     public Color PipelineColor
     {
         get => pipelineColor;
@@ -32,6 +36,7 @@ public abstract class itemObject : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+        canvas.transform.parent = null;
     }
 
     public abstract void process();
@@ -54,5 +59,13 @@ public abstract class itemObject : MonoBehaviour
         rb.useGravity = true;
         col.enabled = true;
         //rb.AddForce(transform.forward * 3, ForceMode.Impulse);
+    }
+
+    void Update()
+    {
+        if (canvas != null)
+        {
+            canvas.transform.position = transform.position + new Vector3(0, 1, 1);
+        }
     }
 }
