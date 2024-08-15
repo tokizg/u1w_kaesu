@@ -58,6 +58,7 @@ public class Emitter : MonoBehaviour
         generatance.transform.position = generatePointObject.position;
         generatance.transform.rotation = generatePointObject.rotation;
         generatance.GetComponent<itemObject>().initialize(pipelineColor);
+        generatance.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
     }
 
     // なにかしらの作業
