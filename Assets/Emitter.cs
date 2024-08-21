@@ -60,4 +60,6 @@ public class Emitter : MonoBehaviour
         generatance.GetComponent<itemObject>().initialize(pipelineColor);
         generatance.GetComponent<Rigidbody>().AddForce(transform.forward * 5, ForceMode.Impulse);
     }
+
+    // なにかしらの作業
 }
