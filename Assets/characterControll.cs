@@ -10,6 +10,11 @@ public class characterControll : MonoBehaviour
     [SerializeField]
     float characterSpeed = 7f;
 
+    Vector2 flickStartPos;
+    Vector2 flickEndPos;
+
+    Vector3 direction = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,10 +24,20 @@ public class characterControll : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xInput = Input.GetAxisRaw("Horizontal");
-        float yInput = Input.GetAxisRaw("Vertical");
+        float xInput = 0;
+        float yInput = 0;
 
-        Vector3 direction = new Vector3(xInput, 0, yInput).normalized;
+        if (Input.GetMouseButtonDown(0))
+        {
+            flickStartPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            flickEndPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            xInput = flickEndPos.x - flickStartPos.x;
+            yInput = flickEndPos.y - flickStartPos.y;
+            direction = new Vector3(xInput, 0, yInput).normalized;
+        }
 
         if (direction.magnitude != 0f)
         {
